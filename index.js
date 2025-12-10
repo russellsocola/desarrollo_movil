@@ -1,6 +1,7 @@
 const express = require('express');
-const mysql = require('mysql2');
 const bodyParser = require('body-parser');
+const canchaRoutes = require("./routes/cancha.routes");
+const conexion = require("./config/database");
 
 const app = express();
 const port = 3000;
@@ -8,25 +9,15 @@ const port = 3000;
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-const conexion = mysql.createConnection({
-  host: 'localhost',
-  user: 'root',
-  password: '',
-  database: 'decidetucancha'
-});
-
 app.listen(port, () => {
   console.log(`Servidor corriendo en el puerto ${port}`);
-});
-
-conexion.connect((error) => {
-  if (error) throw error
-  console.log('Conexión exitosa a la base de datos decidetucancha.');
 });
 
 app.get('/', (req, res) => {
   res.send('API DecideTuCancha Activa');
 });
+
+app.use("/", canchaRoutes);
 
 app.get('/canchas', (req, res) => {
   const sql = 'SELECT * FROM cancha';
