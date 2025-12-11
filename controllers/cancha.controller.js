@@ -73,7 +73,18 @@ const searchCanchaById = (req, res) => {
     // Los stored procedures pueden devolver múltiples resultados
     // El primer elemento del array es generalmente el resultado principal
     const resultado = Array.isArray(rpta) && rpta.length > 0 ? rpta[0] : rpta;
-    const data = (resultado && resultado.length > 0) ? resultado : null;
+    
+    // Para searchCanchaById, devolver un solo objeto, no un array
+    let data = null;
+    if (resultado) {
+      if (Array.isArray(resultado) && resultado.length > 0) {
+        // Si es un array, tomar el primer elemento (objeto único)
+        data = resultado[0];
+      } else if (!Array.isArray(resultado)) {
+        // Si ya es un objeto, usarlo directamente
+        data = resultado;
+      }
+    }
     
     return sendSuccess(res, data);
   });
