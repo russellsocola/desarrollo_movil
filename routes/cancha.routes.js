@@ -5,6 +5,11 @@ const canchaController = require("../controllers/cancha.controller");
 // Rutas para búsqueda de canchas
 router.get("/search_canchas_by_name", canchaController.searchCanchasByName);
 router.get("/search_cancha_by_id", canchaController.searchCanchaById);
+router.get("/search_reservas_by_user", canchaController.searchReservasByUser);
+// Ruta para actualizar favorito
+router.post("/update_favorito", canchaController.updateFavorito);
+// Ruta para eliminar reserva
+router.delete("/delete_reserva", canchaController.deleteReserva);
 
 module.exports = router;
 
