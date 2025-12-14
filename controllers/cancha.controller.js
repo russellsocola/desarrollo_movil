@@ -31,9 +31,9 @@ const searchProductsByNameSelect = (req, res) => {
 const searchCanchasByName = (req, res) => {
   const ls_name = req.query.name;
 
-  if (!ls_name) {
+  /*if (!ls_name) {
     return sendError(res, 400, 'El parámetro name es requerido');
-  }
+  }*/
 
   const consulta = "CALL USP_Cancha_SearchByName(?)";
   
@@ -237,11 +237,47 @@ const deleteReserva = (req, res) => {
   });
 };
 
+const validarLogin = (req, res) => {
+  const ls_email = req.query.email;
+  const ls_password = req.query.password;
+
+  if (!ls_email) {
+    return sendError(res, 400, 'El parámetro email es requerido');
+  }
+
+  if (!ls_password) {
+    return sendError(res, 400, 'El parámetro password es requerido');
+  }
+
+  const consulta = "CALL USP_Login_IniciarSesion(?, ?)";
+  
+  conexion.query(consulta, [ls_email, ls_password], (err, rpta) => {
+    if (err) {
+      console.error("Error al ejecutar el stored procedure:", err.message);
+      return sendError(res, 500, err.message);
+    }
+
+    const resultado = Array.isArray(rpta) && rpta.length > 0 ? rpta[0] : rpta;
+    
+    let data = null;
+    if (resultado) {
+      if (Array.isArray(resultado) && resultado.length > 0) {
+        data = resultado[0];
+      } else if (!Array.isArray(resultado)) {
+        data = resultado;
+      }
+    }
+    
+    return sendSuccess(res, data);
+  });
+};
+
 module.exports = {
   searchCanchasByName,
   searchCanchaById,
   updateFavorito,
   searchReservasByUser,
   deleteReserva,
+  validarLogin,
 };
 

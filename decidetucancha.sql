@@ -17,7 +17,18 @@ CREATE TABLE cancha (
     precio_hora DECIMAL(10,2) NOT NULL, 
     dimensiones VARCHAR(50),            
     tipo_piso VARCHAR(50),              
-    imagen_url VARCHAR(255)             
+    imagen_url VARCHAR(255),
+	ambiente VARCHAR(100) NOT NULL,        
+	iluminacion VARCHAR(30) NOT NULL
+);
+
+CREATE TABLE favorito (
+    usuario_id INT NOT NULL,
+    cancha_id INT NOT NULL,
+	estado BIT NOT NULL DEFAULT 0,
+    fecha_registro DATETIME NOT NULL, 
+    FOREIGN KEY (usuario_id) REFERENCES usuario(id),
+    FOREIGN KEY (cancha_id) REFERENCES cancha(id)
 );
 
 CREATE TABLE reserva (
